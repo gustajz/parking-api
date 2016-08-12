@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import parking.model.Proprietario;
-import parking.repository.ProprietarioRepository;
+import parking.repository.NoSQLProprietarioRepository;
 
 @RestController
 @RequestMapping(path = "/proprietario")
 public class ProprietarioController {
 
 	@Autowired
-	private ProprietarioRepository proprietarioRepository;
+	private NoSQLProprietarioRepository proprietarioRepository;
 
 	@RequestMapping(path = "/placa/{placa}", method = RequestMethod.GET)
 	public List<Proprietario> buscarPorPlaca(@PathVariable(value = "placa") String placa) {
