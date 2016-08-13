@@ -7,7 +7,7 @@ RUN apk add --no-cache curl
 ADD /parking-api.jar //
 
 HEALTHCHECK --interval=5s --timeout=5s \
-  CMD curl -f http://localhost:8080/parking/api/health || exit 1
+  CMD curl -f http://localhost:8080/api/health || exit 1
 
 ENV DB_HOST DB
 ENV DB_PORT 5432

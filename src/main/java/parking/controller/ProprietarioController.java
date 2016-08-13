@@ -2,6 +2,8 @@ package parking.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,4 +30,8 @@ public class ProprietarioController {
 		return proprietarioRepository.save(proprietario);
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	public Proprietario get(@AuthenticationPrincipal UserDetails principal) {
+		return proprietarioRepository.findByUsuario(principal.getUsername());
+	}
 }
