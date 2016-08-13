@@ -175,8 +175,8 @@
                     <forceTags>true</forceTags>
                     <dockerDirectory>docker</dockerDirectory>
                     <imageTags>
-                        <imageTag>${project.version}</imageTag>
-                        <imageTag>latest</imageTag>
+                        <imageTag>gustajz/${project.version}</imageTag>
+                        <imageTag>gustajz/latest</imageTag>
                     </imageTags>
                 </configuration>
             </plugin>
