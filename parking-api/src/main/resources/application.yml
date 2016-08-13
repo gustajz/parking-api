@@ -1,2 +1,44 @@
 server:
-  contextPath: /parking/api
+  contextPath: /api
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+ldap:
+  url: ${LDAP_URL}
+  user:
+    search:
+      base: ou=Users
+      filter: (uid={0})
+
+liquibase:
+  change-log: classpath:/db/changelog-master.xml
+
+---
+spring:
+  profiles: development
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/parking
+    username: parking
+    password: parking
+
+ldap:
+  url: ldap://ldap.renner.local/dc=renner,dc=local
+  user:
+    search:
+      base: ou=Users
+      filter: (uid={0})
+
+logging: 
+  level:
+    org.hibernate.SQL: trace

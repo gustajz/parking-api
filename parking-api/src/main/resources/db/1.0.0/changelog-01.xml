@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+						http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+	<changeSet id="20160812-2328" author="gustavojotz">
+		<createTable tableName="proprietario">
+			<column name="id" autoIncrement="true" type="int">
+				<constraints primaryKey="true" primaryKeyName="proprietario_pk" />
+			</column>
+            <column name="usuario" type="varchar">
+                <constraints nullable="false" unique="true" />
+            </column>
+			<column name="nome" type="varchar"/>
+            <column name="celular" type="varchar"/>
+            <column name="ramal" type="int"/>
+            <column name="andar" type="int"/>
+            <column name="posicao" type="varchar"/>
+            <column name="gravatar" type="varchar"/>
+            <column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dh_login" type="timestamp with time zone"/>
+		</createTable>
+	</changeSet>
+    
+	<changeSet id="20160812-2337" author="gustavojotz">
+		<createTable tableName="veiculo">
+			<column name="id" autoIncrement="true" type="int">
+				<constraints primaryKey="true" primaryKeyName="veiculo_pk" />
+			</column>
+			<column name="proprietario_id" type="int">
+				<constraints referencedTableName="proprietario" referencedColumnNames="id" foreignKeyName="veiculo_proprietario_fk" />
+			</column>
+            <column name="cor" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modelo" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="placa" type="varchar(7)">
+                <constraints nullable="false"/>
+            </column>
+			<column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
+				<constraints nullable="false"/>
+			</column>
+
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>

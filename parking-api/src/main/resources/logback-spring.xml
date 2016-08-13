@@ -3,7 +3,7 @@
 	<include resource="org/springframework/boot/logging/logback/base.xml" />
 	
    <logger name="org.springframework" level="INFO" />
-	
+   
    <logger name="parking" level="DEBUG" />
 	
 	<root level="INFO"/>
