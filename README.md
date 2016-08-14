@@ -13,4 +13,9 @@
 
 ### Run Parking API
 
-	$ docker run -it --rm --link postgres:db -p 8080:8080 parking-api --spring.profiles.active=development
+	$ docker run -it --rm=true --link postgres:db -p 8080:8080 parking-api --spring.profiles.active=development
+	
+### DockerHUB
+
+    $ docker run -d --name parking --link postgres:db -p 8080:8080 gustajz/parking-api
+

@@ -1,0 +1,52 @@
+version: '2'
+services:
+  database:
+    image: postgres
+    restart: unless-stopped    
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432/tcp"
+    environment:
+      - TZ=America/Sao_Paulo
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - ./create-db.sh:/docker-entrypoint-initdb.d/create-db.sh      
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "1" 
+        
+  api:
+    image: gustajz/parking-api
+    restart: unless-stopped
+    expose:
+      - "8080/tcp"
+    environment:
+      - TZ=America/Sao_Paulo
+      - LDAP_URL=ldap://10.0.100.230/dc=renner,dc=local
+    links:
+      - "database:db"
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "1" 
+
+  wwww:
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    expose:
+      - "80/tcp"
+    environment:
+      - TZ=America/Sao_Paulo            
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+    command: /bin/bash -c "cat /etc/nginx/conf.d/nginx.config > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    links:
+      - api
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "1" 
