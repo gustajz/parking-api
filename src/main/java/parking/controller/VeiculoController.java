@@ -8,6 +8,8 @@ import java.util.stream.StreamSupport;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,12 @@ public class VeiculoController {
 
 	@Autowired
 	private VeiculoRepository veiculoRepository;
+
+	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
+	@PreAuthorize("@permissionEvaluator.isOwner(#veiculo.proprietario, principal)")
+	public Veiculo update(@RequestBody(required = true) Veiculo veiculo) {
+		return veiculoRepository.save(veiculo);
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Veiculo> pesquisar(@RequestParam(name = "placa", required = true) @Size(min = 3) String placa) {
