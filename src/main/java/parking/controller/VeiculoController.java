@@ -39,6 +39,12 @@ public class VeiculoController {
 		return veiculoRepository.save(veiculo);
 	}
 
+	@RequestMapping(method = { RequestMethod.DELETE })
+	@PreAuthorize("@permissionEvaluator.isOwner(#veiculo.proprietario, principal)")
+	public void delete(@RequestBody(required = true) Veiculo veiculo) {
+		veiculoRepository.delete(veiculo);
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Veiculo> pesquisar(@RequestParam(name = "placa", required = true) @Size(min = 3) String placa) {
 
