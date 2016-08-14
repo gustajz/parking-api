@@ -10,6 +10,9 @@ services:
 
 script:
   - mvn clean package docker:build
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker tag parking-api gustajz/parking-api
+  - docker push gustajz/parking-api
 
 cache:
   directories:
