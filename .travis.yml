@@ -10,10 +10,15 @@ services:
 
 script:
   - mvn clean package docker:build
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker tag parking-api gustajz/parking-api
-  - docker push gustajz/parking-api
 
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - export REPO=parking-api
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker tag $REPO gustajz/$REPO:$TAG
+  - docker tag $REPO gustajz/$REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push gustajz/$REPO:$TAGx
+  
 cache:
   directories:
     - $HOME/.m2
