@@ -14,6 +14,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Getter;
@@ -27,6 +29,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+@DynamicUpdate
+@DynamicInsert
 public class Veiculo extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;

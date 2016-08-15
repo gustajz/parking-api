@@ -15,8 +15,8 @@ import parking.repository.ProprietarioRepository;
  * @author gustavojotz
  *
  */
-@Component("permissionEvaluator")
-public class PermissionEvaluator {
+@Component("proprietarioSecurityEvaluator")
+public class ProprietarioSecurityEvaluator {
 
 	@Autowired
 	private ProprietarioRepository proprietarioRepository;
