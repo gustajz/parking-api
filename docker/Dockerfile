@@ -4,8 +4,6 @@ MAINTAINER Gustavo Jotz <gustavojotz@cwi.com.br>
 
 RUN apk add --no-cache curl
 
-ADD /parking-api.jar //
-
 ENV TZ America/Sao_Paulo
 
 ENV DB_HOST db
@@ -13,7 +11,12 @@ ENV DB_PORT 5432
 ENV DB_NAME parking
 ENV DB_USER parking
 ENV DB_PASS parking
+
 ENV LDAP_URL ldap://ldap.renner.local/dc=renner,dc=local
+
+ARG VERSION
+
+ADD /parking-api-${VERSION}.jar /parking-api.jar
 
 HEALTHCHECK --interval=5s --timeout=5s \
   CMD curl -f http://localhost:8080/api/health || exit 1

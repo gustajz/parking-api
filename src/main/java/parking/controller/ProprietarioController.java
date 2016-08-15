@@ -25,7 +25,7 @@ public class ProprietarioController {
 	private ProprietarioRepository proprietarioRepository;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	@PreAuthorize("@permissionEvaluator.isOwner(#proprietario, principal)")
+	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#proprietario, principal)")
 	public Proprietario update(@RequestBody(required = true) Proprietario proprietario) {
 		return proprietarioRepository.save(proprietario);
 	}
