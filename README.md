@@ -13,7 +13,10 @@
 
 ### Run Parking API
 
-	$ docker run -it --rm=true --link postgres:db -p 8080:8080 parking-api --spring.profiles.active=development
+	$ docker run -it --rm=true --link postgres:db -p 8080:8080 parking-api \
+	   --spring.profiles.active=development \
+	   --ldap.url=ldap://10.0.100.230/dc=renner,dc=local \
+	   --spring.datasource.url=jdbc:postgresql://db:5432/parking
 	
 ### DockerHUB
 
