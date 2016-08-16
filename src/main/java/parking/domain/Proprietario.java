@@ -48,6 +48,8 @@ public class Proprietario extends AbstractEntity implements Serializable {
 	
 	private String celular;
 
+	private Integer ramal;
+	
 	private Integer andar;
 
 	private String posicao;
