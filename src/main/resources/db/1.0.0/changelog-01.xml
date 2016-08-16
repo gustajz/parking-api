@@ -45,8 +45,18 @@
 			<column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
 				<constraints nullable="false"/>
 			</column>
-
 		</createTable>
 	</changeSet>
+    
+    <changeSet id="20160815-2322" author="gustavojotz">
+        <addUniqueConstraint columnNames="placa" tableName="veiculo"/>        
+    </changeSet>
+    
+    <changeSet id="20160815-2332" author="gustavojotz">
+        <sql>CREATE INDEX veiculo_placa_idx ON veiculo (placa varchar_pattern_ops)</sql>
+        <rollback>
+            <sql>DROP INDEX veiculo_placa_idx</sql>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>
