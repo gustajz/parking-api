@@ -3,7 +3,18 @@ server:
 
 spring:
   datasource:
+    continue-on-error: true
     driver-class-name: org.postgresql.Driver
+    tomcat: 
+      maxActive: 10
+      initialSize: 4
+      maxIdle: 8
+      minIdle: 4
+      testOnBorrow: true
+      testOnConnect: true
+      validationQuery: SELECT 1
+      initSQL: SELECT 1
+      jdbcInterceptors: ConnectionState;StatementFinalizer;ResetAbandonedTimer    
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASS}
@@ -27,18 +38,15 @@ spring:
   profiles: development
 
   datasource:
-    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/parking
     username: parking
     password: parking
 
 ldap:
   url: ldap://ldap.renner.local/dc=renner,dc=local
-  user:
-    search:
-      base: ou=Users
-      filter: (uid={0})
 
 logging: 
   level:
+    parking: trace
     org.hibernate.SQL: trace
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
