@@ -1,5 +1,6 @@
 package parking.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +10,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import parking.security.RESTAuthenticationEntryPoint;
+import parking.security.RESTAuthenticationFailureHandler;
+import parking.security.RESTAuthenticationSuccessHandler;
 
 /**
  * 
@@ -16,15 +23,29 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  *
  */
 @Configuration
+@EnableTransactionManagement
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private RESTAuthenticationEntryPoint authenticationEntryPoint;
 	
+	@Autowired
+	private RESTAuthenticationFailureHandler authenticationFailureHandler;
+
+	@Autowired
+	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().fullyAuthenticated()
-			.and().formLogin().permitAll();
-		http.csrf().disable();
+		http.httpBasic();
+		http.authorizeRequests().anyRequest().fullyAuthenticated();
+		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+		http.formLogin().permitAll();
+		http.formLogin().successHandler(authenticationSuccessHandler);
+		http.formLogin().failureHandler(authenticationFailureHandler);
+		http.csrf().disable();//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());;
 	}
 
 	@Override
@@ -38,19 +59,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		@Value("${ldap.url}")
 		private String url;
 		
-		@Value("${ldap.user.search.base}")
-		private String userSearchBase;
-
-		@Value("${ldap.user.search.filter}")
-		private String userSearchFilter;
+		@Value("${ldap.domain}")
+		private String domain;
 
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
-			auth.ldapAuthentication()
-				.userSearchFilter(userSearchFilter)
-				.userSearchBase(userSearchBase)
-				.contextSource().url(url);
+		    ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(domain, url);
+		    provider.setConvertSubErrorCodesToExceptions(true);
+		    provider.setUseAuthenticationRequestCredentials(true);
+			auth.authenticationProvider(provider);
 		}
+		
 	}
 	
 }
