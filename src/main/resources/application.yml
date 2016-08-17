@@ -1,5 +1,7 @@
 server:
   contextPath: /api
+  session:
+    timeout: 60
 
 spring:
   datasource:
@@ -25,10 +27,7 @@ spring:
 
 ldap:
   url: ${LDAP_URL}
-  user:
-    search:
-      base: ou=Users
-      filter: (uid={0})
+  domain: ${LDAP_DOMAIN}
 
 liquibase:
   change-log: classpath:/db/changelog-master.xml
@@ -43,8 +42,9 @@ spring:
     password: parking
 
 ldap:
-  url: ldap://ldap.renner.local/dc=renner,dc=local
-
+  url: ldap://s005.cwinet.local
+  domain: cwinet.local
+  
 logging: 
   level:
     parking: trace

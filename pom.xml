@@ -5,7 +5,7 @@
 
     <groupId>br.com.cwisoftware</groupId>
     <artifactId>parking-api</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <url>https://github.com/gustajz/parking-api</url>
 
     <parent>
@@ -68,6 +68,11 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
             <version>1.12.1.RELEASE</version><!--$NO-MVN-MAN-VER$ -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
         </dependency>
 
         <dependency>
