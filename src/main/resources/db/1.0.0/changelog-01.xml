@@ -55,7 +55,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="usuario" type="varchar">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false"/>
             </column>
             <column name="nome" type="varchar"/>
             <column name="celular" type="varchar"/>
@@ -63,7 +63,7 @@
             <column name="andar" type="int"/>
             <column name="posicao" type="varchar"/>
             <column name="gravatar" type="varchar"/>
-            <column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
+            <column name="dh_criacao" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="dh_login" type="timestamp with time zone"/>
@@ -120,7 +120,7 @@
             <column name="placa" type="varchar(7)">
                 <constraints nullable="false"/>
             </column>
-            <column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
+            <column name="dh_criacao" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
         </createTable>
