@@ -3,6 +3,7 @@ package parking.controller;
 import java.lang.management.ManagementFactory;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
+@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class HealthController {
 
 	@RequestMapping(value = "/health", method = RequestMethod.GET)
