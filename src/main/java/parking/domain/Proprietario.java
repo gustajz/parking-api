@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Getter;
@@ -30,6 +31,7 @@ import lombok.Setter;
 @Entity
 @DynamicUpdate
 @DynamicInsert
+@Audited
 public class Proprietario extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
