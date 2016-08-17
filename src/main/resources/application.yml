@@ -28,6 +28,7 @@ spring:
 ldap:
   url: ${LDAP_URL}
   domain: ${LDAP_DOMAIN}
+  login_form: false
 
 liquibase:
   change-log: classpath:/db/changelog-master.xml
