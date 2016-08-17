@@ -11,7 +11,7 @@ services:
       - TZ=America/Sao_Paulo
       - POSTGRES_PASSWORD=postgres
     volumes: 
-      - ./create-db.sh:/docker-entrypoint-initdb.d/create-db.sh      
+      - ./create-db.sh:/docker-entrypoint-initdb.d/create-db.sh
     logging:
       options:
         max-size: "1m"
@@ -24,7 +24,8 @@ services:
       - "8080/tcp"
     environment:
       - TZ=America/Sao_Paulo
-      - LDAP_URL=ldap://10.0.100.230/dc=renner,dc=local
+      - LDAP_URL=ldap://10.0.100.20
+      - LDAP_DOMAIN=cwinet.local
     links:
       - "database:db"
     logging:
@@ -43,6 +44,7 @@ services:
       - TZ=America/Sao_Paulo            
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
+      - ./www:/usr/share/nginx/html:ro
     command: /bin/bash -c "cat /etc/nginx/conf.d/nginx.config > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     links:
       - api
