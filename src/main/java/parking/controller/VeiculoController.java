@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +30,8 @@ import parking.repository.VeiculoRepository;
  *
  */
 @RestController
-@RequestMapping(path = "/veiculo")
+@RequestMapping(path = "/veiculo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@Transactional(propagation = Propagation.NEVER)
 public class VeiculoController {
 
 	@Autowired
@@ -40,8 +43,9 @@ public class VeiculoController {
 	 * @param veiculo
 	 * @return {@link Veiculo} cadastrado.
 	 */
+	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
-	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, principal)")
+	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
 	public Veiculo update(@RequestBody(required = true) Veiculo veiculo) {
 		return veiculoRepository.save(veiculo);
 	}
@@ -51,8 +55,9 @@ public class VeiculoController {
 	 * 
 	 * @param id
 	 */
+	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/{id}", method = { RequestMethod.DELETE })
-	@PreAuthorize("@veiculoSecurityEvaluator.isOwner(#id, principal)")
+	@PreAuthorize("@veiculoSecurityEvaluator.isOwner(#id, authentication)")
 	public void delete(@RequestParam(required = true) Long id) {
 		veiculoRepository.delete(id);
 	}
@@ -66,8 +71,8 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<Veiculo> get(@AuthenticationPrincipal UserDetails principal, @PageableDefault Pageable pageable) {
-		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(principal.getUsername());
+	public Page<Veiculo> get(Authentication authentication, @PageableDefault Pageable pageable) {
+		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(authentication.getName());
 		return veiculoRepository.findAll(predicate, pageable);
 	}
 
@@ -88,11 +93,7 @@ public class VeiculoController {
 														// forma de arrumar
 														// no
 														// QueryDslPredicateExecutor
-
-		// Stream<Veiculo> stream = StreamSupport.stream(iterable.spliterator(),
-		// false);
-
-		return page;// stream.collect(Collectors.toList());
+		return page;
 	}
 
 }

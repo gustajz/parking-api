@@ -1,9 +1,11 @@
 package parking.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,20 +20,22 @@ import parking.repository.ProprietarioRepository;
  *
  */
 @RestController
-@RequestMapping(path = "/proprietario")
+@RequestMapping(path = "/proprietario", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@Transactional(propagation = Propagation.NEVER)
 public class ProprietarioController {
 
 	@Autowired
 	private ProprietarioRepository proprietarioRepository;
 	
+	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = RequestMethod.POST)
-	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#proprietario, principal)")
+	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#proprietario, authentication)")
 	public Proprietario update(@RequestBody(required = true) Proprietario proprietario) {
 		return proprietarioRepository.save(proprietario);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Proprietario get(@AuthenticationPrincipal UserDetails principal) {
-		return proprietarioRepository.findByUsuario(principal.getUsername());
+	public Proprietario get(Authentication authentication) {
+		return proprietarioRepository.findByUsuario(authentication.getName());
 	}
 }
