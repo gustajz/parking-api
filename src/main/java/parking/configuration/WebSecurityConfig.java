@@ -37,15 +37,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
 
+	@Value("${ldap.login_form}")
+	private Boolean loginform;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic();
-		http.authorizeRequests().anyRequest().fullyAuthenticated();
-		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
-		http.formLogin().permitAll();
-		http.formLogin().successHandler(authenticationSuccessHandler);
-		http.formLogin().failureHandler(authenticationFailureHandler);
 		http.csrf().disable();//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());;
+		http.authorizeRequests().anyRequest().fullyAuthenticated();
+		http.formLogin().permitAll();
+		if (!loginform) {
+			http.formLogin().successHandler(authenticationSuccessHandler);
+			http.formLogin().failureHandler(authenticationFailureHandler);
+			http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+		}
 	}
 
 	@Override
