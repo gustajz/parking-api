@@ -16,20 +16,14 @@ services:
 script:
   - mvn clean package docker:build
 
-#branches:
-#  only:
-#  - master
+branches:
+  only:
+  - master
+  - develop
 
 after_success:
-  - test $TRAVIS_BRANCH == "master" \
-    && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" \
-    && export REPO=parking-api \
-    && export VERSION=`xml2 < pom.xml  | grep /project/version= | sed 's/.*=//'` \
-    && docker tag $REPO gustajz/$REPO \
-    && docker tag $REPO gustajz/$VERSION \
-    && docker push gustajz/$REPO:latest \
-    && docker push gustajz/$REPO:$VERSION
- 
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then source docker_push.sh; else source docker_push_snapshot.sh; fi
+
 cache:
   directories:
     - $HOME/.m2

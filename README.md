@@ -1,4 +1,6 @@
 
+[![Build Status](https://travis-ci.org/gustajz/parking-api.svg?branch=master)](https://travis-ci.org/gustajz/parking-api)
+
 # parking-api
 
 
