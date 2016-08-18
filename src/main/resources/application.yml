@@ -1,7 +1,7 @@
 server:
   contextPath: /api
   session:
-    timeout: 60
+    timeout: 1800
 
 spring:
   datasource:
