@@ -21,7 +21,7 @@ script:
 #  - master
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "develop" ]; then ./docker_push.sh; fi
+  - if [ "$TRAVIS_BRANCH" == "develop" ]; then source docker_push.sh; fi
  
 cache:
   directories:
