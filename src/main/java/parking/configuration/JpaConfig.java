@@ -12,6 +12,11 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 import parking.domain.AbstractEntity;
 
+/**
+ * 
+ * @author gustavojotz
+ *
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = "parking.repository")
 @EntityScan(basePackageClasses = AbstractEntity.class)
@@ -19,10 +24,11 @@ public class JpaConfig {
 
 	@Bean
 	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-		ObjectMapper objectMapper = new ObjectMapper();
+		final ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new Hibernate5Module());
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
 		jsonConverter.setObjectMapper(objectMapper);
 		return jsonConverter;
 	}
