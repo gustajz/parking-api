@@ -3,6 +3,7 @@ package parking.controller;
 import java.security.Principal;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,7 +86,8 @@ public class VeiculoController {
 	 */
 	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET)
 	public Page<Veiculo> pesquisar(@RequestParam(name = "placa", required = true) String placa, @PageableDefault Pageable pageable) {
-
+		Validate.notBlank(placa, "Necessário informar a placa ou inicial");
+		
 		Predicate predicate = QVeiculo.veiculo.placa.likeIgnoreCase(StringUtils.remove(placa, '%') + '%');
 
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
