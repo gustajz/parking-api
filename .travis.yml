@@ -16,13 +16,14 @@ services:
 script:
   - mvn clean package docker:build
 
-#branches:
-#  only:
-#  - master
+branches:
+  only:
+  - master
+  - develop
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "develop" ]; then source docker_push.sh; fi
- 
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then source .travis/docker_push.sh; else source .travis/docker_push_snapshot.sh; fi
+
 cache:
   directories:
     - $HOME/.m2
