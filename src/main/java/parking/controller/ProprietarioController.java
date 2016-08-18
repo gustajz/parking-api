@@ -26,7 +26,14 @@ public class ProprietarioController {
 
 	@Autowired
 	private ProprietarioRepository proprietarioRepository;
-	
+
+	/**
+	 * Atualiza as informações do proprietario autenticado.
+	 * 
+	 * @param proprietario
+	 *            objeto {@link Proprietario}
+	 * @return returna o proprietario atualizado
+	 */
 	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#proprietario, authentication)")
@@ -34,8 +41,16 @@ public class ProprietarioController {
 		return proprietarioRepository.save(proprietario);
 	}
 
+	/**
+	 * Retorna o proprietario autenticado.
+	 * 
+	 * @param authentication
+	 *            objeto Authentication
+	 * @return returna o proprietario autenticado
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public Proprietario get(Authentication authentication) {
 		return proprietarioRepository.findByUsuario(authentication.getName());
 	}
+	
 }
