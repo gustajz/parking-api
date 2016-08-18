@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,5 +60,10 @@ public class Veiculo extends AbstractEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dh_criacao", updatable = false)
 	private Date dataCriacao;
+	
+	@PrePersist
+	public void before() {
+		this.dataCriacao = new Date();
+	}
 
 }
