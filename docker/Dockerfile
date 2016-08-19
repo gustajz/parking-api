@@ -6,9 +6,7 @@ RUN apk add --no-cache curl
 
 ENV TZ America/Sao_Paulo
 
-ENV DB_HOST db
-ENV DB_PORT 5432
-ENV DB_NAME parking
+ENV DB_URL jdbc:postgresql://db:5432/parking
 ENV DB_USER parking
 ENV DB_PASS parking
 
