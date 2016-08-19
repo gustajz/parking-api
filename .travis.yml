@@ -22,7 +22,11 @@ branches:
   - develop
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then source docker_push.sh; else source docker_push_snapshot.sh; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then 
+        source docker_push.sh; 
+    else 
+        source docker_push_snapshot.sh; 
+    fi
 
 cache:
   directories:
