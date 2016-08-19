@@ -1,7 +1,9 @@
 package parking.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Propagation;
@@ -37,8 +39,9 @@ public class ProprietarioController {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#proprietario, authentication)")
-	public Proprietario update(@RequestBody(required = true) Proprietario proprietario) {
-		return proprietarioRepository.save(proprietario);
+	public ResponseEntity<Proprietario> update(@RequestBody(required = true) Proprietario proprietario) {
+		proprietarioRepository.save(proprietario);
+		return new ResponseEntity<>(proprietario, HttpStatus.OK);
 	}
 
 	/**
@@ -49,8 +52,8 @@ public class ProprietarioController {
 	 * @return returna o proprietario autenticado
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public Proprietario get(Authentication authentication) {
-		return proprietarioRepository.findByUsuario(authentication.getName());
+	public ResponseEntity<Proprietario> get(Authentication authentication) {
+		return new ResponseEntity<>(proprietarioRepository.findByUsuario(authentication.getName()), HttpStatus.OK);
 	}
 	
 }
