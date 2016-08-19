@@ -10,6 +10,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @author gustavojotz
+ *
+ */
 @Component
 public class RESTAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 

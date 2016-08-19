@@ -43,36 +43,36 @@
 		</createTable>
 	</changeSet>
 
-    <changeSet id="20160812-2329" author="gustavojotz">
-        <createTable tableName="proprietario_aud">
-            <column name="id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="rev" type="int">
-                <constraints nullable="false" referencedTableName="revinfo" referencedColumnNames="id" foreignKeyName="proprietario_aud_rev_fk"/>
-            </column>
-            <column name="revtype" type="smallint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="usuario" type="varchar">
-                <constraints nullable="false"/>
-            </column>
-            <column name="nome" type="varchar"/>
-            <column name="celular" type="varchar"/>
-            <column name="ramal" type="int"/>
-            <column name="andar" type="int"/>
-            <column name="posicao" type="varchar"/>
-            <column name="gravatar" type="varchar"/>
-            <column name="dh_criacao" type="timestamp with time zone">
-                <constraints nullable="false"/>
-            </column>
-            <column name="dh_login" type="timestamp with time zone"/>
-        </createTable>
-    </changeSet> 
+<!--     <changeSet id="20160812-2329" author="gustavojotz"> -->
+<!--         <createTable tableName="proprietario_aud"> -->
+<!--             <column name="id" type="int"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="rev" type="int"> -->
+<!--                 <constraints nullable="false" referencedTableName="revinfo" referencedColumnNames="id" foreignKeyName="proprietario_aud_rev_fk"/> -->
+<!--             </column> -->
+<!--             <column name="revtype" type="smallint"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="usuario" type="varchar"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="nome" type="varchar"/> -->
+<!--             <column name="celular" type="varchar"/> -->
+<!--             <column name="ramal" type="int"/> -->
+<!--             <column name="andar" type="int"/> -->
+<!--             <column name="posicao" type="varchar"/> -->
+<!--             <column name="gravatar" type="varchar"/> -->
+<!--             <column name="dh_criacao" type="timestamp with time zone"> -->
+<!--                 <constraints nullable="false"/> -->
+<!--             </column> -->
+<!--             <column name="dh_login" type="timestamp with time zone"/> -->
+<!--         </createTable> -->
+<!--     </changeSet>  -->
     
-    <changeSet id="20160812-2330" author="gustavojotz">
-        <addUniqueConstraint tableName="proprietario_aud" columnNames="id, rev"/>
-    </changeSet>
+<!--     <changeSet id="20160812-2330" author="gustavojotz"> -->
+<!--         <addUniqueConstraint tableName="proprietario_aud" columnNames="id, rev"/> -->
+<!--     </changeSet> -->
 
 	<changeSet id="20160812-2337" author="gustavojotz">
 		<createTable tableName="veiculo">
@@ -124,6 +124,14 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    
+    <changeSet id="20160818-2349" author="gustavojotz">
+        <dropNotNullConstraint columnName="proprietario_id" tableName="veiculo_aud"/>
+        <dropNotNullConstraint columnName="cor" tableName="veiculo_aud"/>
+        <dropNotNullConstraint columnName="modelo" tableName="veiculo_aud"/>
+        <dropNotNullConstraint columnName="placa" tableName="veiculo_aud"/>
+        <dropNotNullConstraint columnName="dh_criacao" tableName="veiculo_aud"/>
     </changeSet>
     
     <changeSet id="20160812-2339" author="gustavojotz">

@@ -10,8 +10,13 @@ import org.hibernate.envers.RevisionEntity;
 
 import lombok.Getter;
 import lombok.Setter;
-import parking.security.UserRevisionListener;
+import parking.security.listener.UserRevisionListener;
 
+/**
+ * 
+ * @author gustavojotz
+ *
+ */
 @Entity
 @Table(name = "REVINFO")
 @Setter
@@ -24,4 +29,5 @@ public class UserRevEntity extends DefaultRevisionEntity {
 	private static final long serialVersionUID = 1L;
 
 	private String usuario;
+	
 }

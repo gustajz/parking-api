@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class Veiculo extends AbstractEntity {
 	@Column(updatable = false)
 	private Long id;
 
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(updatable = false)
 	private Proprietario proprietario;
