@@ -22,10 +22,17 @@ branches:
   - develop
 
 after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" 
+  - export REPO=parking-api
+  - export VERSION=`xml2 < pom.xml  | grep /project/version= | sed 's/.*=//'`
   - if [ "$TRAVIS_BRANCH" == "master" ]; then 
-        source docker_push.sh; 
+        docker tag $REPO gustajz/$REPO;
+        docker tag $REPO gustajz/$REPO:$VERSION;
+        docker push gustajz/$REPO:latest;
+        docker push gustajz/$REPO:$VERSION;
     else 
-        source docker_push_snapshot.sh; 
+        docker tag $REPO gustajz/$REPO:snapshot;
+        docker push gustajz/$REPO:snapshot;
     fi
 
 cache:
