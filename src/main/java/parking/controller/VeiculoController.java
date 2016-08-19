@@ -83,6 +83,7 @@ public class VeiculoController {
 	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, @PageableDefault Pageable pageable) {
 		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(authentication.getName());
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
+		page.forEach(v -> v.getProprietario().getId());
         return new ResponseEntity<>(page, HttpStatus.OK);
 
 	}
