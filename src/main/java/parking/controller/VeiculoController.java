@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,15 +46,30 @@ public class VeiculoController {
 	private VeiculoRepository veiculoRepository;
 
 	/**
-	 * Inclui ou atualiza um {@link Veiculo}Veiculo do Usuário autenticado.
+	 * Atualiza um {@link Veiculo}Veiculo do Usuário autenticado.
 	 * 
 	 * @param veiculo
 	 * @return {@link Veiculo} cadastrado.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
-	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
+	@RequestMapping(method = { RequestMethod.POST })
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
 	public ResponseEntity<Veiculo> update(@RequestBody(required = true) Veiculo veiculo) {
+		veiculoRepository.save(veiculo);
+        return new ResponseEntity<>(veiculo, HttpStatus.OK);
+	}
+
+	/**
+	 * Inclui um {@link Veiculo}Veiculo do Usuário autenticado.
+	 * 
+	 * @param veiculo
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	@RequestMapping(method = { RequestMethod.PUT })
+	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
+	public ResponseEntity<Veiculo> newVeiculo(@RequestBody(required = true) Veiculo veiculo) {
+		veiculo.setId(null);
 		veiculoRepository.save(veiculo);
         return new ResponseEntity<>(veiculo, HttpStatus.OK);
 	}
@@ -80,7 +96,8 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, @PageableDefault Pageable pageable) {
+	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, 
+											@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
 		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(authentication.getName());
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
 		page.forEach(v -> v.getProprietario().getId());
@@ -96,7 +113,10 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET)
-	public ResponseEntity<Page<Veiculo>> pesquisar(@RequestParam(name = "placa", required = true) String placa, @PageableDefault Pageable pageable) {
+	public ResponseEntity<Page<Veiculo>> pesquisar(
+			@RequestParam(name = "placa", required = true) String placa, 
+			@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
+		
 		Validate.notBlank(placa);
 		
 		Predicate predicate = QVeiculo.veiculo.placa.likeIgnoreCase(StringUtils.remove(placa, '%') + '%');
