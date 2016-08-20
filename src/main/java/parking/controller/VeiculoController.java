@@ -46,31 +46,22 @@ public class VeiculoController {
 	private VeiculoRepository veiculoRepository;
 
 	/**
-	 * Atualiza um {@link Veiculo}Veiculo do Usuário autenticado.
+	 * Inclui ou atualiza um {@link Veiculo}Veiculo do Usuário autenticado.
 	 * 
 	 * @param veiculo
 	 * @return {@link Veiculo} cadastrado.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
-	@RequestMapping(method = { RequestMethod.POST })
+	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
-	public ResponseEntity<Veiculo> update(@RequestBody(required = true) Veiculo veiculo) {
-		veiculoRepository.save(veiculo);
-        return new ResponseEntity<>(veiculo, HttpStatus.OK);
-	}
+	public ResponseEntity<Veiculo> updateOrNew(@RequestBody(required = true) Veiculo veiculo) {
 
-	/**
-	 * Inclui um {@link Veiculo}Veiculo do Usuário autenticado.
-	 * 
-	 * @param veiculo
-	 * @return
-	 */
-	@Transactional(propagation = Propagation.REQUIRED)
-	@RequestMapping(method = { RequestMethod.PUT })
-	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
-	public ResponseEntity<Veiculo> newVeiculo(@RequestBody(required = true) Veiculo veiculo) {
-		veiculo.setId(null);
+		if (veiculo.getId() != null && !veiculoRepository.exists(veiculo.getId())) {
+			veiculo.setId(null);
+		}
+		
 		veiculoRepository.save(veiculo);
+		
         return new ResponseEntity<>(veiculo, HttpStatus.OK);
 	}
 
@@ -83,7 +74,9 @@ public class VeiculoController {
 	@RequestMapping(value = "/{id}", method = { RequestMethod.DELETE })
 	@PreAuthorize("@veiculoSecurityEvaluator.isOwner(#id, authentication)")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		
 		veiculoRepository.delete(id);
+		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
@@ -98,9 +91,13 @@ public class VeiculoController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, 
 											@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
+		
 		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(authentication.getName());
+		
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
+		
 		page.forEach(v -> v.getProprietario().getId());
+		
         return new ResponseEntity<>(page, HttpStatus.OK);
 
 	}
@@ -122,6 +119,7 @@ public class VeiculoController {
 		Predicate predicate = QVeiculo.veiculo.placa.likeIgnoreCase(StringUtils.remove(placa, '%') + '%');
 
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
+		
 		page.forEach(v -> v.getProprietario().getId()); // TODO buscar uma
 														// forma de arrumar
 														// no
