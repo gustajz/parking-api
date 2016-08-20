@@ -49,6 +49,7 @@ spring:
   profiles: development
 
   datasource:
+    url: jdbc:oracle:thin:@localhost:1521:XE
     username: parking
     password: parking
 
