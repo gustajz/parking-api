@@ -22,7 +22,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20160819-1317" author="gustavojotz" dbms="oracle">
+    <changeSet id="20160819-1317" author="gustavojotz" dbms="!postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="proprietario_id_seq"/>
@@ -58,7 +58,7 @@
         <modifyDataType tableName="proprietario" columnName="posicao" newDataType="varchar(48)"/>
     </changeSet>
     
-    <changeSet id="20160819-1318" author="gustavojotz" dbms="oracle">
+    <changeSet id="20160819-1318" author="gustavojotz" dbms="!postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="veiculo_id_seq"/>
