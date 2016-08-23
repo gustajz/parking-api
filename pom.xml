@@ -5,7 +5,7 @@
 
     <groupId>br.com.cwisoftware</groupId>
     <artifactId>parking-api</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <url>https://github.com/gustajz/parking-api</url>
 
     <parent>
