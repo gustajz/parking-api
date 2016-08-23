@@ -114,9 +114,10 @@ public class VeiculoController {
 			@RequestParam(name = "placa", required = true) String placa, 
 			@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
 		
-		Validate.notBlank(placa);
+		// Não permite caracteres especiais na busca
+		Validate.isTrue(StringUtils.isAlphanumeric(placa));
 		
-		Predicate predicate = QVeiculo.veiculo.placa.like(StringUtils.remove(placa.toUpperCase(), '%') + '%');
+		Predicate predicate = QVeiculo.veiculo.placa.like(placa.toUpperCase() + '%');
 
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
 		
@@ -127,11 +128,11 @@ public class VeiculoController {
 		return new ResponseEntity<>(page, HttpStatus.OK);
 	}
 
-	@ResponseStatus(value=HttpStatus.PRECONDITION_FAILED, reason="Placa não informada")
+	@ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "Placa não informada ou incorreta")
 	@ExceptionHandler(IllegalArgumentException.class)
 	public void illegalArgumentException() {}
 	
-	@ResponseStatus(value=HttpStatus.CONFLICT, reason="Registro existente")
+	@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Registro existente")
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public void DataIntegrityViolationException() {}
 	
