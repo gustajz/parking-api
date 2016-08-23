@@ -22,8 +22,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20160819-1315" author="gustavojotz" dbms="oracle">
-        <createSequence sequenceName="proprietario_id_seq"/>
+    <changeSet id="20160819-1317" author="gustavojotz" dbms="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="proprietario_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="proprietario_id_seq" cacheSize="0"/>
     </changeSet>
 
 	<changeSet id="20160812-2328" author="gustavojotz">
@@ -48,39 +53,17 @@
             <column name="dh_login" type="timestamp"/>
 		</createTable>
 	</changeSet>
-
-<!--     <changeSet id="20160812-2329" author="gustavojotz"> -->
-<!--         <createTable tableName="proprietario_aud"> -->
-<!--             <column name="id" type="int"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="rev" type="int"> -->
-<!--                 <constraints nullable="false" referencedTableName="revinfo" referencedColumnNames="id" foreignKeyName="proprietario_aud_rev_fk"/> -->
-<!--             </column> -->
-<!--             <column name="revtype" type="smallint"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="usuario" type="varchar"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="nome" type="varchar"/> -->
-<!--             <column name="celular" type="varchar"/> -->
-<!--             <column name="ramal" type="int"/> -->
-<!--             <column name="andar" type="int"/> -->
-<!--             <column name="posicao" type="varchar"/> -->
-<!--             <column name="gravatar" type="varchar"/> -->
-<!--             <column name="dh_criacao" type="timestamp with time zone"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="dh_login" type="timestamp with time zone"/> -->
-<!--         </createTable> -->
-<!--     </changeSet>  -->
     
-<!--     <changeSet id="20160812-2330" author="gustavojotz"> -->
-<!--         <addUniqueConstraint tableName="proprietario_aud" columnNames="id, rev"/> -->
-<!--     </changeSet> -->
-
-    <changeSet id="20160819-1316" author="gustavojotz" dbms="oracle">
+    <changeSet id="20160821-2215" author="gustavojotz">
+        <modifyDataType tableName="proprietario" columnName="posicao" newDataType="varchar(48)"/>
+    </changeSet>
+    
+    <changeSet id="20160819-1318" author="gustavojotz" dbms="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="veiculo_id_seq"/>
+            </not>
+        </preConditions>
         <createSequence sequenceName="veiculo_id_seq"/>
     </changeSet>
 
@@ -136,6 +119,13 @@
         <sql>CREATE INDEX veiculo_placa_idx ON veiculo (placa varchar_pattern_ops)</sql>
         <rollback>
             <sql>DROP INDEX veiculo_placa_idx</sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="20160815-2334" author="gustavojotz" dbms="oracle">
+        <sql>CREATE UNIQUE INDEX VEICULO_PLACA_IDX ON VEICULO (UPPER(PLACA) ASC)</sql>
+        <rollback>
+            <sql>DROP INDEX VEICULO_PLACA_IDX</sql>
         </rollback>
     </changeSet>
 
