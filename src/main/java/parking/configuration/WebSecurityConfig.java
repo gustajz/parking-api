@@ -1,7 +1,6 @@
 package parking.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
 
-	@Value("${ldap.login_form}")
-	private Boolean loginform;
+	@Autowired
+	private LdapSettings settings;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -50,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();// .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());;
 		http.authorizeRequests().anyRequest().fullyAuthenticated();
 		http.formLogin().permitAll();
-		if (!loginform) {
+		if (!settings.getLogin_form()) {
 			http.formLogin().successHandler(authenticationSuccessHandler);
 			http.formLogin().failureHandler(authenticationFailureHandler);
 			http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
@@ -87,6 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected static class LdapSettings {
 		private String url;
 		private String domain;
+		private Boolean login_form;
 	}
 	
 }
