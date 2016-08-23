@@ -116,7 +116,7 @@ public class VeiculoController {
 		
 		Validate.notBlank(placa);
 		
-		Predicate predicate = QVeiculo.veiculo.placa.likeIgnoreCase(StringUtils.remove(placa, '%') + '%');
+		Predicate predicate = QVeiculo.veiculo.placa.like(StringUtils.remove(placa.toUpperCase(), '%') + '%');
 
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
 		
