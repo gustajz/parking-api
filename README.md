@@ -1,4 +1,3 @@
-
 [![Build Status](https://travis-ci.org/gustajz/parking-api.svg?branch=master)](https://travis-ci.org/gustajz/parking-api)
 
 # parking-api
@@ -11,15 +10,26 @@
 
 ### Run PostgreSQL
 
-	$ docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+	$ docker run -d --name postgres1 -e POSTGRES_PASSWORD=postgres -p 5432:5432 \
+	   -v $(pwd)/docker/compose/create-db.sh:/docker-entrypoint-initdb.d/create-db.sh postgres
 
-### Run Parking API Development
+### Run Parking API in Development Profile
 
-	$ docker run -it --rm=true --link postgres:db -p 8080:8080 parking-api \
-	   --spring.profiles.active=development \
-	   --ldap.url=ldap://10.0.100.20 \
-	   --spring.datasource.url=jdbc:postgresql://db:5432/parking
+    $ docker run -it --rm=true --name parking-api-ui --link postgres:db -p 8080:8080 gustajz/parking-api \
+       --ldap.url=ldap://myad.mydomain.local --ldap.domain=mydomain.local --ldap.login_form=true \
+       --spring.profiles.active=development,postgresql \
+       --spring.datasource.url=jdbc:postgresql://db:5432/parking
 	
-### DockerHUB
+### Run Parking API in Production Profile (Oracle)
 
-    $ docker run -d --name parking --link postgres:db -p 8080:8080 gustajz/parking-api
+    $ docker run -d --name parking-api -p 8080:8080 \
+        -e DB_URL=jdbc:oracle:thin:@db.mydomain.local:1521:XE -e DB_PASS=mypassword \
+        -e LDAP_URL=ldap://myad.mydomain.local -e LDAP_DOMAIN=mydomain.local gustajz/parking-api
+        
+### Run Parking API in Production Profile (PostgreSQL)
+
+    $ docker run -d --name parking-api -p 8080:8080 \
+        -e DB_URL=jdbc:postgresql://db.mydomain.local:5432/parking -e DB_PASS=mypassword \
+        -e LDAP_URL=ldap://myad.mydomain.local -e LDAP_DOMAIN=mydomain.local gustajz/parking-api \
+        --spring.profiles.active=postgresql 
+        

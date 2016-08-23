@@ -16,10 +16,19 @@
             <column name="timestamp" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="usuario" type="varchar">
+            <column name="usuario" type="varchar(128)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="20160819-1317" author="gustavojotz" dbms="!postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="proprietario_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="proprietario_id_seq" cacheSize="0"/>
     </changeSet>
 
 	<changeSet id="20160812-2328" author="gustavojotz">
@@ -27,52 +36,36 @@
 			<column name="id" autoIncrement="true" type="int">
 				<constraints primaryKey="true" primaryKeyName="proprietario_pk" />
 			</column>
-            <column name="usuario" type="varchar">
+            <column name="usuario" type="varchar(128)">
                 <constraints nullable="false" unique="true" />
             </column>
-			<column name="nome" type="varchar"/>
-            <column name="celular" type="varchar"/>
-            <column name="ramal" type="int"/>
-            <column name="andar" type="int"/>
-            <column name="posicao" type="varchar"/>
-            <column name="gravatar" type="varchar"/>
-            <column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
+			<column name="nome" type="varchar(128)">
                 <constraints nullable="false"/>
             </column>
-            <column name="dh_login" type="timestamp with time zone"/>
+            <column name="celular" type="varchar(48)"/>
+            <column name="ramal" type="int"/>
+            <column name="andar" type="int"/>
+            <column name="posicao" type="varchar(16)"/>
+            <column name="gravatar" type="varchar(32)"/>
+            <column name="dh_criacao" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dh_login" type="timestamp"/>
 		</createTable>
 	</changeSet>
-
-<!--     <changeSet id="20160812-2329" author="gustavojotz"> -->
-<!--         <createTable tableName="proprietario_aud"> -->
-<!--             <column name="id" type="int"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="rev" type="int"> -->
-<!--                 <constraints nullable="false" referencedTableName="revinfo" referencedColumnNames="id" foreignKeyName="proprietario_aud_rev_fk"/> -->
-<!--             </column> -->
-<!--             <column name="revtype" type="smallint"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="usuario" type="varchar"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="nome" type="varchar"/> -->
-<!--             <column name="celular" type="varchar"/> -->
-<!--             <column name="ramal" type="int"/> -->
-<!--             <column name="andar" type="int"/> -->
-<!--             <column name="posicao" type="varchar"/> -->
-<!--             <column name="gravatar" type="varchar"/> -->
-<!--             <column name="dh_criacao" type="timestamp with time zone"> -->
-<!--                 <constraints nullable="false"/> -->
-<!--             </column> -->
-<!--             <column name="dh_login" type="timestamp with time zone"/> -->
-<!--         </createTable> -->
-<!--     </changeSet>  -->
     
-<!--     <changeSet id="20160812-2330" author="gustavojotz"> -->
-<!--         <addUniqueConstraint tableName="proprietario_aud" columnNames="id, rev"/> -->
-<!--     </changeSet> -->
+    <changeSet id="20160821-2215" author="gustavojotz">
+        <modifyDataType tableName="proprietario" columnName="posicao" newDataType="varchar(48)"/>
+    </changeSet>
+    
+    <changeSet id="20160819-1318" author="gustavojotz" dbms="!postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="veiculo_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="veiculo_id_seq"/>
+    </changeSet>
 
 	<changeSet id="20160812-2337" author="gustavojotz">
 		<createTable tableName="veiculo">
@@ -82,16 +75,16 @@
 			<column name="proprietario_id" type="int">
 				<constraints referencedTableName="proprietario" referencedColumnNames="id" foreignKeyName="veiculo_proprietario_fk" />
 			</column>
-            <column name="cor" type="varchar">
+            <column name="cor" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="modelo" type="varchar">
+            <column name="modelo" type="varchar(48)">
                 <constraints nullable="false"/>
             </column>
             <column name="placa" type="varchar(7)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true" uniqueConstraintName="veiculo_placa_uk"/>
             </column>
-			<column name="dh_criacao" type="timestamp with time zone" defaultValue="now()">
+			<column name="dh_criacao" type="timestamp">
 				<constraints nullable="false"/>
 			</column>
 		</createTable>
@@ -109,43 +102,30 @@
                 <constraints nullable="false"/>
             </column>
             <column name="proprietario_id" type="int">
-                <constraints referencedTableName="proprietario" referencedColumnNames="id" foreignKeyName="veiculo_proprietario_fk" />
+                <constraints referencedTableName="proprietario" referencedColumnNames="id" foreignKeyName="veiculo_aud_proprietario_fk" />
             </column>
-            <column name="cor" type="varchar">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modelo" type="varchar">
-                <constraints nullable="false"/>
-            </column>
-            <column name="placa" type="varchar(7)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="dh_criacao" type="timestamp with time zone">
-                <constraints nullable="false"/>
-            </column>
+            <column name="cor" type="varchar(32)"/>
+            <column name="modelo" type="varchar(48)"/>
+            <column name="placa" type="varchar(7)"/>
+            <column name="dh_criacao" type="timestamp"/>
         </createTable>
-    </changeSet>
-    
-    <changeSet id="20160818-2349" author="gustavojotz">
-        <dropNotNullConstraint columnName="proprietario_id" tableName="veiculo_aud"/>
-        <dropNotNullConstraint columnName="cor" tableName="veiculo_aud"/>
-        <dropNotNullConstraint columnName="modelo" tableName="veiculo_aud"/>
-        <dropNotNullConstraint columnName="placa" tableName="veiculo_aud"/>
-        <dropNotNullConstraint columnName="dh_criacao" tableName="veiculo_aud"/>
     </changeSet>
     
     <changeSet id="20160812-2339" author="gustavojotz">
         <addUniqueConstraint tableName="veiculo_aud" columnNames="id, rev"/>
     </changeSet>
     
-    <changeSet id="20160815-2322" author="gustavojotz">
-        <addUniqueConstraint columnNames="placa" tableName="veiculo"/>        
-    </changeSet>
-    
     <changeSet id="20160815-2333" author="gustavojotz" dbms="postgresql">
         <sql>CREATE INDEX veiculo_placa_idx ON veiculo (placa varchar_pattern_ops)</sql>
         <rollback>
             <sql>DROP INDEX veiculo_placa_idx</sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="20160815-2334" author="gustavojotz" dbms="oracle">
+        <sql>CREATE UNIQUE INDEX VEICULO_PLACA_IDX ON VEICULO (UPPER(PLACA) ASC)</sql>
+        <rollback>
+            <sql>DROP INDEX VEICULO_PLACA_IDX</sql>
         </rollback>
     </changeSet>
 

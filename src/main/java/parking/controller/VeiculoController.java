@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,8 +54,14 @@ public class VeiculoController {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
-	public ResponseEntity<Veiculo> update(@RequestBody(required = true) Veiculo veiculo) {
+	public ResponseEntity<Veiculo> updateOrNew(@RequestBody(required = true) Veiculo veiculo) {
+
+		if (veiculo.getId() != null && !veiculoRepository.exists(veiculo.getId())) {
+			veiculo.setId(null);
+		}
+		
 		veiculoRepository.save(veiculo);
+		
         return new ResponseEntity<>(veiculo, HttpStatus.OK);
 	}
 
@@ -67,7 +74,9 @@ public class VeiculoController {
 	@RequestMapping(value = "/{id}", method = { RequestMethod.DELETE })
 	@PreAuthorize("@veiculoSecurityEvaluator.isOwner(#id, authentication)")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		
 		veiculoRepository.delete(id);
+		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
@@ -80,9 +89,15 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, @PageableDefault Pageable pageable) {
+	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, 
+											@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
+		
 		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(authentication.getName());
+		
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
+		
+		page.forEach(v -> v.getProprietario().getId());
+		
         return new ResponseEntity<>(page, HttpStatus.OK);
 
 	}
@@ -95,12 +110,17 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET)
-	public ResponseEntity<Page<Veiculo>> pesquisar(@RequestParam(name = "placa", required = true) String placa, @PageableDefault Pageable pageable) {
-		Validate.notBlank(placa);
+	public ResponseEntity<Page<Veiculo>> pesquisar(
+			@RequestParam(name = "placa", required = true) String placa, 
+			@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
 		
-		Predicate predicate = QVeiculo.veiculo.placa.likeIgnoreCase(StringUtils.remove(placa, '%') + '%');
+		// Não permite caracteres especiais na busca
+		Validate.isTrue(StringUtils.isAlphanumeric(placa));
+		
+		Predicate predicate = QVeiculo.veiculo.placa.like(placa.toUpperCase() + '%');
 
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
+		
 		page.forEach(v -> v.getProprietario().getId()); // TODO buscar uma
 														// forma de arrumar
 														// no
@@ -108,11 +128,11 @@ public class VeiculoController {
 		return new ResponseEntity<>(page, HttpStatus.OK);
 	}
 
-	@ResponseStatus(value=HttpStatus.PRECONDITION_FAILED, reason="Placa não informada")
+	@ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "Placa não informada ou incorreta")
 	@ExceptionHandler(IllegalArgumentException.class)
 	public void illegalArgumentException() {}
 	
-	@ResponseStatus(value=HttpStatus.CONFLICT, reason="Registro existente")
+	@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Registro existente")
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public void DataIntegrityViolationException() {}
 	

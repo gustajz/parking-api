@@ -11,10 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
@@ -66,6 +68,12 @@ public class Veiculo extends AbstractEntity {
 	@PrePersist
 	public void before() {
 		this.dataCriacao = new Date();
+		setPlaca(StringUtils.upperCase(getPlaca()));
+	}
+	
+	@PreUpdate
+	public void beforeUpdate() {
+		setPlaca(StringUtils.upperCase(getPlaca()));
 	}
 
 }

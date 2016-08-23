@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     continue-on-error: true
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: oracle.jdbc.OracleDriver
     tomcat: 
       maxActive: 10
       initialSize: 4
@@ -14,10 +14,10 @@ spring:
       minIdle: 4
       testOnBorrow: true
       testOnConnect: true
-      validationQuery: SELECT 1
-      initSQL: SELECT 1
+      validationQuery: SELECT 1 FROM DUAL
+      initSQL: SELECT 1 FROM DUAL
       jdbcInterceptors: ConnectionState;StatementFinalizer;ResetAbandonedTimer    
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
   
@@ -34,11 +34,22 @@ liquibase:
   change-log: classpath:/db/changelog-master.xml
 
 ---
+spring: 
+  profiles: postgresql
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    tomcat: 
+      validationQuery: SELECT 1
+      initSQL: SELECT 1
+    url: jdbc:postgresql://localhost:5432/parking
+
+---
 spring:
   profiles: development
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/parking
+    url: jdbc:oracle:thin:@localhost:1521:XE
     username: parking
     password: parking
 

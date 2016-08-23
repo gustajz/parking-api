@@ -6,13 +6,12 @@ RUN apk add --no-cache curl
 
 ENV TZ America/Sao_Paulo
 
-ENV DB_HOST db
-ENV DB_PORT 5432
-ENV DB_NAME parking
+ENV DB_URL jdbc:postgresql://db:5432/parking
 ENV DB_USER parking
 ENV DB_PASS parking
 
-ENV LDAP_URL ldap://ldap.renner.local/dc=renner,dc=local
+ENV LDAP_URL ldap://s005.cwinet.local
+ENV LDAP_DOMAIN cwinet.local
 
 ARG VERSION
 
@@ -22,5 +21,3 @@ HEALTHCHECK --interval=5s --timeout=5s \
   CMD curl -f http://localhost:8080/api/health || exit 1
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "parking-api.jar"]
-
-#CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "parking-api.jar"]
