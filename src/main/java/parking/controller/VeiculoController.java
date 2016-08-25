@@ -92,7 +92,7 @@ public class VeiculoController {
 	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, 
 											@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
 		
-		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.eq(authentication.getName());
+		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.likeIgnoreCase(authentication.getName());
 		
 		Page<Veiculo> page = veiculoRepository.findAll(predicate, pageable);
 		

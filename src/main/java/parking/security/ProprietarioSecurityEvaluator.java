@@ -23,7 +23,7 @@ public class ProprietarioSecurityEvaluator {
 	
 	public boolean isOwner(final Proprietario proprietario, final Authentication authentication) {
 		QProprietario qProprietario = QProprietario.proprietario;
-		Predicate predicate = qProprietario.usuario.eq(authentication.getName()).and(qProprietario.id.eq(proprietario.getId()));
+		Predicate predicate = qProprietario.usuario.likeIgnoreCase(authentication.getName()).and(qProprietario.id.eq(proprietario.getId()));
 		return proprietarioRepository.exists(predicate);
 	}
 	
