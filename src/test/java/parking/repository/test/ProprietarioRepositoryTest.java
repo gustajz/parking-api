@@ -29,7 +29,7 @@ public class ProprietarioRepositoryTest {
 
 	@Test
 	public void findByUsuarioRetornaProprietario() {
-		Proprietario p = this.repository.findByUsuario("gustavojotz");
+		Proprietario p = this.repository.findByUsuarioIgnoreCase("gustavojotz");
 
 		assertThat(p.getNome()).isEqualTo("Gustavo Jotz");
 		assertThat(p.getUsuario()).isEqualTo("gustavojotz");

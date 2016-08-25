@@ -129,4 +129,11 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="20160825-0011" author="gustavojotz" dbms="oracle">
+        <sql>CREATE UNIQUE INDEX PROPRIETARIO_IDX ON PROPRIETARIO (UPPER(USUARIO) ASC)</sql>
+        <rollback>
+            <sql>DROP INDEX PROPRIETARIO_IDX</sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
