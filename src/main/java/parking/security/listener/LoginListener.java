@@ -39,7 +39,7 @@ public class LoginListener implements ApplicationListener<InteractiveAuthenticat
 		LdapUserDetails userDetails = (LdapUserDetails) event.getAuthentication().getPrincipal();
 		log.info("Login Successful: {}", userDetails.getUsername());
 
-		Proprietario proprietario = proprietarioRepository.findByUsuario(userDetails.getUsername());
+		Proprietario proprietario = proprietarioRepository.findByUsuarioIgnoreCase(userDetails.getUsername());
 		if (proprietario == null) {
 			log.debug("Primeiro acesso de {}", userDetails.getUsername());
 

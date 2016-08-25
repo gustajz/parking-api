@@ -13,6 +13,6 @@ import parking.domain.Proprietario;
 public interface ProprietarioRepository
 		extends PagingAndSortingRepository<Proprietario, Long>, QueryDslPredicateExecutor<Proprietario> {
 
-	Proprietario findByUsuario(final String usuario);
+	Proprietario findByUsuarioIgnoreCase(final String usuario);
 
 }

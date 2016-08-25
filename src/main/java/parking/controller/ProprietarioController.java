@@ -53,7 +53,7 @@ public class ProprietarioController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Proprietario> get(Authentication authentication) {
-		return new ResponseEntity<>(proprietarioRepository.findByUsuario(authentication.getName()), HttpStatus.OK);
+		return new ResponseEntity<>(proprietarioRepository.findByUsuarioIgnoreCase(authentication.getName()), HttpStatus.OK);
 	}
 	
 }
