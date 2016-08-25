@@ -22,7 +22,7 @@ public class VeiculoSecurityEvaluator {
 	
 	public boolean isOwner(final Long id, final Authentication authentication) {
 		QVeiculo qVeiculo = QVeiculo.veiculo;
-		Predicate predicate = qVeiculo.id.eq(id).and(qVeiculo.proprietario.usuario.eq(authentication.getName()));
+		Predicate predicate = qVeiculo.id.eq(id).and(qVeiculo.proprietario.usuario.likeIgnoreCase(authentication.getName()));
 		return veiculoRepository.exists(predicate);
 	}
 	

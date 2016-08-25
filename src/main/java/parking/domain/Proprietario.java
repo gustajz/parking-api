@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -67,6 +68,7 @@ public class Proprietario extends AbstractEntity implements Serializable {
 	@PrePersist
 	public void before() {
 		this.dataCriacao = new Date();
+		setUsuario(StringUtils.lowerCase(getUsuario()));
 	}
 	
 }
