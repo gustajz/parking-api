@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 /**
  * 
  * @author gustavojotz
@@ -31,7 +33,7 @@ public class HealthController {
 	}
 	
 	@RequestMapping(value = "/logged-in", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> loggedIn(Authentication authentication) {
+	public ResponseEntity<Boolean> loggedIn(@ApiIgnore Authentication authentication) {
 		return new ResponseEntity<>(authentication.isAuthenticated(), HttpStatus.OK);
 	}
 	
