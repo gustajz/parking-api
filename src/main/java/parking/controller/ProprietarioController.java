@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import parking.domain.Proprietario;
 import parking.repository.ProprietarioRepository;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -39,6 +41,7 @@ public class ProprietarioController {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#proprietario, authentication)")
+	@ApiOperation(value = "Atualiza os dados do Proprietário")
 	public ResponseEntity<Proprietario> update(@RequestBody(required = true) Proprietario proprietario) {
 		proprietarioRepository.save(proprietario);
 		return new ResponseEntity<>(proprietario, HttpStatus.OK);
@@ -52,7 +55,8 @@ public class ProprietarioController {
 	 * @return returna o proprietario autenticado
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Proprietario> get(Authentication authentication) {
+	@ApiOperation(value = "Retorna o Proprietário autenticado")
+	public ResponseEntity<Proprietario> get(@ApiIgnore Authentication authentication) {
 		return new ResponseEntity<>(proprietarioRepository.findByUsuarioIgnoreCase(authentication.getName()), HttpStatus.OK);
 	}
 	
