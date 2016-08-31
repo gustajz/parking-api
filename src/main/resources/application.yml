@@ -9,9 +9,9 @@ spring:
     driver-class-name: oracle.jdbc.OracleDriver
     tomcat: 
       maxActive: 10
-      initialSize: 4
-      maxIdle: 8
-      minIdle: 4
+      initialSize: 2
+      maxIdle: 4
+      minIdle: 2
       testOnBorrow: true
       testOnConnect: true
       validationQuery: SELECT 1 FROM DUAL
