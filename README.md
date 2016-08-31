@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gustajz/parking-api.svg?branch=master)](https://travis-ci.org/gustajz/parking-api) [![](https://images.microbadger.com/badges/image/gustajz/parking-api.svg)](https://microbadger.com/images/gustajz/parking-api)
+[![Build Status](https://travis-ci.org/gustajz/parking-api.svg?branch=master)](https://travis-ci.org/gustajz/parking-api) [![](https://images.microbadger.com/badges/image/gustajz/parking-api.svg)](https://microbadger.com/images/gustajz/parking-api) [![Project Stats](https://www.openhub.net/p/parking-api/widgets/project_thin_badge.gif)](https://www.openhub.net/p/parking-api)
 
 # parking-api
 
