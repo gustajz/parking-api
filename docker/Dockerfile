@@ -13,11 +13,11 @@ ENV DB_PASS parking
 ENV LDAP_URL ldap://s005.cwinet.local
 ENV LDAP_DOMAIN cwinet.local
 
-ARG VERSION
-
-ADD /parking-api-${VERSION}.jar /parking-api.jar
-
 HEALTHCHECK --interval=5s --timeout=5s \
   CMD curl -f http://localhost:8080/api/health || exit 1
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "parking-api.jar"]
+
+ARG VERSION
+
+ADD /parking-api-${VERSION}.jar /parking-api.jar

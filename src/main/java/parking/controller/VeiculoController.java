@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.querydsl.core.types.Predicate;
 
+import io.swagger.annotations.ApiOperation;
 import parking.domain.QVeiculo;
 import parking.domain.Veiculo;
 import parking.repository.VeiculoRepository;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -54,6 +56,7 @@ public class VeiculoController {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
 	@PreAuthorize("@proprietarioSecurityEvaluator.isOwner(#veiculo.proprietario, authentication)")
+	@ApiOperation(value = "Inclui ou atualiza um Veículo")
 	public ResponseEntity<Veiculo> updateOrNew(@RequestBody(required = true) Veiculo veiculo) {
 
 		if (veiculo.getId() != null && !veiculoRepository.exists(veiculo.getId())) {
@@ -73,6 +76,7 @@ public class VeiculoController {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@RequestMapping(value = "/{id}", method = { RequestMethod.DELETE })
 	@PreAuthorize("@veiculoSecurityEvaluator.isOwner(#id, authentication)")
+	@ApiOperation(value = "Remove um Veículo")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		
 		veiculoRepository.delete(id);
@@ -89,7 +93,8 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Page<Veiculo>> get(Authentication authentication, 
+	@ApiOperation(value = "Retorna os veículos do Proprietário autenticado")
+	public ResponseEntity<Page<Veiculo>> get(@ApiIgnore Authentication authentication, 
 											@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
 		
 		Predicate predicate = QVeiculo.veiculo.proprietario.usuario.likeIgnoreCase(authentication.getName());
@@ -110,6 +115,7 @@ public class VeiculoController {
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
 	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET)
+	@ApiOperation(value = "Pesquisa de Veículo")
 	public ResponseEntity<Page<Veiculo>> pesquisar(
 			@RequestParam(name = "placa", required = true) String placa, 
 			@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
