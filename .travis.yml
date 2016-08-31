@@ -30,7 +30,7 @@ after_success:
         docker tag $REPO gustajz/$REPO:$VERSION;
         docker push gustajz/$REPO:latest;
         docker push gustajz/$REPO:$VERSION;
-    else 
+    else if [ "$TRAVIS_BRANCH" == "develop" ]; then
         docker tag $REPO gustajz/$REPO:snapshot;
         docker push gustajz/$REPO:snapshot;
     fi
