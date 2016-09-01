@@ -6,6 +6,12 @@ API REST para auto-gerenciamento de estacionamento corporativo, onde cada espaç
 
 O Web App para esta aplicação está em [parking-app](https://github.com/AlexandreSNeto/parking-app/).
 
+### Pré-requisitos
+
+- Um servidor de LDAP
+- Adicionar as configurações do LDAP no arquivo [Dockerfile](docker/Dockerfile)
+- Docker 1.12+ instalado
+
 ### Compilação
 
 	$ export DOCKER_HOST=unix:///var/run/docker.sock
