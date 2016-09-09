@@ -9,7 +9,6 @@ O Web App para esta aplicação está em [parking-app](https://github.com/Alexan
 ### Pré-requisitos
 
 - Um servidor de LDAP
-- Adicionar as configurações do LDAP no arquivo [Dockerfile](docker/Dockerfile)
 - Docker 1.12+ instalado
 
 ### Compilação
