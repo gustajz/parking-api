@@ -6,6 +6,11 @@ API REST para auto-gerenciamento de estacionamento corporativo, onde cada espaç
 
 O Web App para esta aplicação está em [parking-app](https://github.com/AlexandreSNeto/parking-app/).
 
+### Pré-requisitos
+
+- Um servidor de LDAP
+- Docker 1.12+ instalado
+
 ### Compilação
 
 	$ export DOCKER_HOST=unix:///var/run/docker.sock
@@ -13,7 +18,7 @@ O Web App para esta aplicação está em [parking-app](https://github.com/Alexan
 
 ### Execução do PostgreSQL
 
-	$ docker run -d --name postgres1 -e POSTGRES_PASSWORD=postgres -p 5432:5432 \
+	$ docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 \
 	   -v $(pwd)/docker/compose/create-db.sh:/docker-entrypoint-initdb.d/create-db.sh postgres
 
 ### Execução em modo desenvolvimento
