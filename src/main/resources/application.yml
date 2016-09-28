@@ -28,6 +28,7 @@ spring:
 ldap:
   url: ${LDAP_URL}
   domain: ${LDAP_DOMAIN}
+  domainAlias: ${LDAP_DOMAIN_ALIAS}
   login_form: false
 
 liquibase:
