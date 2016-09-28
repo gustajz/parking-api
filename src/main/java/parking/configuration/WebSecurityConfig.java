@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
+import org.springframework.security.ldap.authentication.ad.ActiveDirectoryAliasLdapAuthenticationProvider;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import lombok.Getter;
@@ -69,9 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
-			ActiveDirectoryLdapAuthenticationProvider provider = 
-					new ActiveDirectoryLdapAuthenticationProvider(settings.getDomain(), settings.getUrl());
-			provider.setConvertSubErrorCodesToExceptions(true);
+			ActiveDirectoryAliasLdapAuthenticationProvider provider = 
+					new ActiveDirectoryAliasLdapAuthenticationProvider(settings.getDomain(), settings.getDomainAlias(), settings.getUrl());
 			provider.setUseAuthenticationRequestCredentials(true);
 			auth.authenticationProvider(provider);
 		}
@@ -86,6 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected static class LdapSettings {
 		private String url;
 		private String domain;
+		private String domainAlias;
 		private Boolean login_form;
 	}
 	
