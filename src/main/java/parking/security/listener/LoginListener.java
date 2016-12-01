@@ -1,5 +1,6 @@
 package parking.security.listener;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -11,6 +12,7 @@ import javax.naming.ldap.Rdn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,6 +40,12 @@ public class LoginListener implements ApplicationListener<InteractiveAuthenticat
 	public void onApplicationEvent(InteractiveAuthenticationSuccessEvent event) {
 		LdapUserDetails userDetails = (LdapUserDetails) event.getAuthentication().getPrincipal();
 		log.info("Login Successful: {}", userDetails.getUsername());
+		
+		
+		Collection<? extends GrantedAuthority> authorities = event.getAuthentication().getAuthorities();
+		for (GrantedAuthority grantedAuthority : authorities) {
+			log.info("{}", grantedAuthority.getAuthority());
+		}
 
 		Proprietario proprietario = proprietarioRepository.findByUsuarioIgnoreCase(userDetails.getUsername());
 		if (proprietario == null) {
