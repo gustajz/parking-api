@@ -76,8 +76,11 @@ public class Proprietario extends AbstractEntity implements Serializable {
 	private Date dataContemplacao;
 
 	@Column(name = "vaga_gerencial", updatable = false, insertable = false)
-	private String vagaGerencial;
-		
+	private Boolean vagaGerencial = Boolean.FALSE;
+
+	@Column(name = "numero_vaga", updatable = false, insertable = false)
+	private String numeroVaga;
+
 	@PrePersist
 	public void before() {
 		this.dataCriacao = new Date();
