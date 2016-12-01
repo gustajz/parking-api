@@ -12,15 +12,28 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="20161128-2347" author="gustavojotz">
-        <addColumn tableName="proprietario">
-            <column name="vaga_gerencial" type="varchar(32)" />
-        </addColumn>
-    </changeSet>
-
     <changeSet id="20161130-2329" author="gustavojotz">
         <addColumn tableName="proprietario">
             <column name="dt_contemplacao" type="date" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20161201-1705" author="gustavojotz">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="proprietario" columnName="vaga_gerencial"/>            
+        </preConditions>
+        <dropColumn tableName="proprietario" columnName="vaga_gerencial"/>
+    </changeSet>
+
+    <changeSet id="20161201-1708" author="gustavojotz">
+        <addColumn tableName="proprietario">
+            <column name="vaga_gerencial" type="boolean" defaultValueBoolean="false" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20161201-1710" author="gustavojotz">
+        <addColumn tableName="proprietario">
+            <column name="numero_vaga" type="varchar(32)" />
         </addColumn>
     </changeSet>
 
