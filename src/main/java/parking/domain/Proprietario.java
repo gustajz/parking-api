@@ -12,6 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicInsert;
@@ -45,6 +46,7 @@ public class Proprietario extends AbstractEntity implements Serializable {
 	@Column(updatable = false)
 	private String usuario;
 
+	@NotEmpty
 	private String nome;
 	
 	private String celular;
@@ -65,6 +67,17 @@ public class Proprietario extends AbstractEntity implements Serializable {
 	@Column(name = "dh_login")
 	private Date dataLogin;
 	
+	@NotNull
+	@Column(name = "participa_sorteio")
+	private Boolean participaSorteio = Boolean.FALSE;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "dt_contemplacao", updatable = false, insertable = false)
+	private Date dataContemplacao;
+
+	@Column(name = "vaga_gerencial", updatable = false, insertable = false)
+	private String vagaGerencial;
+		
 	@PrePersist
 	public void before() {
 		this.dataCriacao = new Date();
