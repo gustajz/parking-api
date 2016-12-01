@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            </dependency>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.data</groupId>
