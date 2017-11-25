@@ -80,6 +80,10 @@ public class Proprietario extends AbstractEntity implements Serializable {
 
 	@Column(name = "numero_vaga", updatable = false, insertable = false)
 	private String numeroVaga;
+	
+	private String cidade;
+	
+	private String bairro;
 
 	@PrePersist
 	public void before() {
