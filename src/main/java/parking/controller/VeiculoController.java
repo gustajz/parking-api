@@ -17,7 +17,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,7 +76,7 @@ public class VeiculoController {
 	 * @param id
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
-	@RequestMapping(value = "/{id}", method = { RequestMethod.DELETE })
+	@DeleteMapping("/{id}")
 	@PreAuthorize("@veiculoSecurityEvaluator.isOwner(#id, authentication)")
 	@ApiOperation(value = "Remove um Veículo")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
@@ -92,7 +94,7 @@ public class VeiculoController {
 	 * @param pageable
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	@ApiOperation(value = "Retorna os veículos do Proprietário autenticado")
 	public ResponseEntity<Page<Veiculo>> get(@ApiIgnore Authentication authentication, 
 											@PageableDefault(sort = { "placa" }, direction = Direction.ASC) Pageable pageable) {
@@ -114,7 +116,7 @@ public class VeiculoController {
 	 *            Número da Placa do Veiculo. Busca com like à direita.
 	 * @return todos os Veiculos do Usuário paginado de 10 em 10.
 	 */
-	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET)
+	@GetMapping("/pesquisar")
 	@ApiOperation(value = "Pesquisa de Veículo")
 	public ResponseEntity<Page<Veiculo>> pesquisar(
 			@RequestParam(name = "placa", required = true) String placa, 
