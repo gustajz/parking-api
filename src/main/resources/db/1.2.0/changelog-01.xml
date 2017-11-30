@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+						http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20171125-1800" author="neto">
+        <addColumn tableName="proprietario">
+            <column name="cidade" type="varchar(100)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20171125-1801" author="neto">
+        <addColumn tableName="proprietario">
+            <column name="bairro" type="varchar(100)" />
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
